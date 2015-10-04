@@ -1,0 +1,48 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="training.eduonix.weatherapp.SettingsFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/TitleText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="Settings"
+            android:textSize="25dp" />
+
+        <EditText
+            android:id="@+id/EdtTxtVal"
+            android:layout_width="220dp"
+            android:layout_height="80dp"
+            android:layout_below="@+id/TitleText"
+            android:layout_marginTop="20dp"
+            android:hint="Enter City"
+            android:paddingLeft="20dp" />
+
+        <Button
+            android:id="@+id/EnterBtn"
+            android:layout_width="130dp"
+            android:layout_height="50dp"
+            android:layout_below="@+id/TitleText"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="40dp"
+            android:layout_toRightOf="@+id/EdtTxtVal"
+            android:text="Enter" />
+
+        <CheckBox
+        android:id="@+id/checkBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Do you like Tutorials Point"
+        android:layout_below="@+id/EdtTxtVal"
+        android:layout_centerHorizontal="true" />
+
+    </RelativeLayout>
+</FrameLayout>
