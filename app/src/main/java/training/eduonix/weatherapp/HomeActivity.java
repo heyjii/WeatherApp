@@ -5,17 +5,9 @@ import android.app.FragmentManager;
 
 import android.app.FragmentTransaction;
 import android.os.Bundle;
-import android.widget.Button;
-
-import training.eduonix.custom.AppLocationService;
 
 
 public class HomeActivity extends Activity {
-
-    Button btnGPSShowLocation;
-    Button btnNWShowLocation;
-    AppLocationService appLocationService;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

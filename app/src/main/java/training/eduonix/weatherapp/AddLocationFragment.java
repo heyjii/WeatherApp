@@ -4,27 +4,35 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.os.Handler;
 import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import training.eduonix.custom.AppLocationService;
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
 
-public class AddLocationFragment extends Fragment {
+import training.eduonix.custom.Constants;
 
-    Button btnGPSShowLocation;
-    Button btnNWShowLocation;
-    AppLocationService appLocationService;
+public class AddLocationFragment extends Fragment implements LocationListener {
 
-    private String GPS_Privider = "GPS" ;
-    private String Network_Provider = "Network" ;
+    private LocationManager locationManager;
+    private Location currentLocation = null;
+    String cityName = "";
+    boolean isAutoLocationEnabled = true;
+    private ProgressBar locationProgressBar ;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -32,95 +40,147 @@ public class AddLocationFragment extends Fragment {
         // Inflate the layout for this fragment
         View locationView = inflater.inflate(R.layout.fragment_add_location, container, false);
 
-        appLocationService = new AppLocationService(
-                getActivity());
+        locationProgressBar =(ProgressBar)locationView.findViewById(R.id.progressBar);
 
-        btnGPSShowLocation = (Button) locationView.findViewById(R.id.showGPSLocationBtn);
-        btnGPSShowLocation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View arg0) {
+        locationManager = (LocationManager)
+                getActivity().getSystemService(Context.LOCATION_SERVICE);
 
-                Location gpsLocation = appLocationService
-                        .getLocation(LocationManager.GPS_PROVIDER );
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(Constants.MY_PREFERENCES, Context.MODE_APPEND);
+        isAutoLocationEnabled = sharedPreferences.getBoolean(Constants.KEY_AUTO_LOCATION_ENABLED, true);
 
-                LocationManager locationManager = (LocationManager) getActivity()
-                        .getSystemService(Context.LOCATION_SERVICE);
-                if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                    if (gpsLocation != null) {
-                        double latitude = gpsLocation.getLatitude();
-                        double longitude = gpsLocation.getLongitude();
-                        Toast.makeText(
-                                getActivity(),
-                                "Mobile Location (GPS): \nLatitude: " + latitude
-                                        + "\nLongitude: " + longitude,
-                                Toast.LENGTH_LONG).show();
-                    } else {
-                        Toast.makeText(
-                                getActivity(),
-                                "GPS Location is not available",
-                                Toast.LENGTH_LONG).show();
-                    }
-                } else {
-                    showSettingsAlert(GPS_Privider);
-                }
+        if (isAutoLocationEnabled) {
+            showSettingsAlert();
+        } else {
 
-            }
-        });
+            locationManager.requestLocationUpdates(
+                    LocationManager.GPS_PROVIDER, 1000, 10, this);
+            locationManager.requestLocationUpdates(
+                    LocationManager.NETWORK_PROVIDER, 1000, 10, this);
+            locationProgressBar.setVisibility(View.VISIBLE);
 
-        btnNWShowLocation = (Button) locationView.findViewById(R.id.showNWLocationBtn);
-        btnNWShowLocation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View arg0) {
-
-                Location nwLocation = appLocationService
-                        .getLocation(LocationManager.NETWORK_PROVIDER);
-
-                if (nwLocation != null) {
-                    double latitude = nwLocation.getLatitude();
-                    double longitude = nwLocation.getLongitude();
-                    Toast.makeText(
-                            getActivity(),
-                            "Mobile Location (NW): \nLatitude: " + latitude
-                                    + "\nLongitude: " + longitude,
-                            Toast.LENGTH_LONG).show();
-                } else {
-                    showSettingsAlert(Network_Provider);
-                }
-
-            }
-        });
-
+        }
         return locationView;
     }
 
-    public void showSettingsAlert(final String provider) {
+    @Override
+    public void onResume() {
+
+        super.onResume();
+        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            locationManager.requestLocationUpdates(
+                    LocationManager.GPS_PROVIDER, 1000, 10, this);
+            locationManager.requestLocationUpdates(
+                    LocationManager.NETWORK_PROVIDER, 1000, 10, this);
+            locationProgressBar.setVisibility(View.VISIBLE);
+
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+
+                    getLastBestLocation();
+                }
+            }, 10000);
+        }
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+
+        locationProgressBar.setVisibility(View.GONE);
+
+        currentLocation = location;
+
+        getLastBestLocation() ;
+    }
+
+    @Override
+    public void onStatusChanged(String s, int i, Bundle bundle) {
+
+    }
+    @Override
+    public void onProviderEnabled(String s) {
+
+    }
+    @Override
+    public void onProviderDisabled(String s) {
+
+    }
+
+    /**
+     * @return the last know best location
+     */
+    private Location getLastBestLocation() {
+        locationProgressBar.setVisibility(View.GONE);
+
+        Location locationGPS = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        Location locationNet = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+
+        long GPSLocationTime = 0;
+        if (null != locationGPS) {
+            GPSLocationTime = locationGPS.getTime();
+        }
+
+        long NetLocationTime = 0;
+
+        if (null != locationNet) {
+            NetLocationTime = locationNet.getTime();
+        }
+
+        if (0 < GPSLocationTime - NetLocationTime) {
+            currentLocation = locationGPS;
+        } else {
+            currentLocation = locationNet;
+        }
+
+        /*------- To get city name from coordinates -------- */
+        Geocoder gcd = new Geocoder(getActivity(), Locale.getDefault());
+        List<Address> addresses;
+        if (currentLocation != null) {
+            try {
+                addresses = gcd.getFromLocation(currentLocation.getLatitude(),
+                        currentLocation.getLongitude(), 1);
+                if (addresses.size() > 0)
+                    System.out.println(addresses.get(0).getLocality());
+                cityName = addresses.get(0).getLocality();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        showLocationMessage();
+        return currentLocation;
+    }
+
+    private void showLocationMessage() {
+        if (currentLocation != null) {
+            String message = "Your Location is:\n Lattitude : " + currentLocation.getLatitude() + "\n Longitude: " + currentLocation.getLongitude();
+
+            if (cityName.length() > 0) {
+                message = message + "\n City name - " + cityName;
+            }
+            Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
+        }
+    }
+
+    public void showSettingsAlert() {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(
                 getActivity());
 
-        alertDialog.setTitle(provider + " SETTINGS");
+        alertDialog.setTitle("Fetch Location");
 
         alertDialog
-                .setMessage(provider + " is not enabled! Want to go to settings menu?");
+                .setMessage("Do you want to fetch your location using GPS automatically?");
 
-        alertDialog.setPositiveButton("Settings",
+        alertDialog.setPositiveButton("Yes",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        if (provider.equalsIgnoreCase(GPS_Privider)) {
-                            Intent intent = new Intent(
-                                    Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                            getActivity().startActivity(intent);
-                        }
-                        else
-                        {
-                            Intent intent = new Intent(
-                                    Settings.ACTION_WIRELESS_SETTINGS);
-                            getActivity().startActivity(intent);
-                        }
-
+                        Intent intent = new Intent(
+                                Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                        getActivity().startActivity(intent);
                     }
                 });
 
-        alertDialog.setNegativeButton("Cancel",
+        alertDialog.setNegativeButton("No",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.cancel();
@@ -129,5 +189,4 @@ public class AddLocationFragment extends Fragment {
 
         alertDialog.show();
     }
-
 }
