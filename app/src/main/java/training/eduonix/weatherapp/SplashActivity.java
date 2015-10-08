@@ -3,9 +3,12 @@ package training.eduonix.weatherapp;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.Gravity;
+
+import training.eduonix.custom.Constants;
 
 public class SplashActivity extends Activity {
 
@@ -13,8 +16,7 @@ public class SplashActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-
-
+        setAutoLocationDefValue();
 
         Handler handler = new Handler() ;
         handler.postDelayed(new Runnable() {
@@ -26,4 +28,12 @@ public class SplashActivity extends Activity {
             }
         },3000) ;
     }
+
+    private void setAutoLocationDefValue()
+    {
+        SharedPreferences sharedPreferences = getSharedPreferences(Constants.MY_PREFERENCES,MODE_APPEND) ;
+        sharedPreferences.edit().putBoolean(Constants.KEY_AUTO_LOCATION_ENABLED,true) ;
+        sharedPreferences.edit().commit() ;
+    }
+
 }

@@ -4,29 +4,19 @@
     android:layout_height="match_parent"
     tools:context="training.eduonix.weatherapp.AddLocationFragment">
 
-    <RelativeLayout
-        android:layout_width="fill_parent"
+    <ProgressBar
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center">
+        android:id="@+id/progressBar"
+        android:layout_gravity="center"
+        android:indeterminate="false" />
 
-        <Button
-            android:id="@+id/showGPSLocationBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_centerInParent="true"
-            android:layout_marginTop="20dp"
-            android:text="Show Location (GPS)" />
-
-        <Button
-            android:id="@+id/showNWLocationBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/showGPSLocationBtn"
-            android:layout_centerHorizontal="true"
-            android:gravity="center"
-            android:layout_marginTop="20dp"
-            android:text="Show Location (Network)" />
-
-    </RelativeLayout>
+    <TextView
+        android:layout_width="120dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="20dp"
+        android:text="Your Locations"
+        android:id="@+id/textView"
+        android:layout_gravity="center_horizontal|top" />
 </FrameLayout>
