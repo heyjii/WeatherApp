@@ -23,7 +23,9 @@ public class SplashActivity extends Activity {
             @Override
             public void run() {
 
+
                 Intent homeIntent = new Intent(SplashActivity.this,HomeActivity.class) ;
+                finish();
                 startActivity(homeIntent);
             }
         },3000) ;

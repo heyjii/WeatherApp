@@ -24,5 +24,7 @@
 <string name="weather_drizzle">&#xf01c;</string>
 
 <string name="place_not_found">Sorry, no weather data found.</string>
+    <string name="enter_location">Enter Location</string>
+    <string name="empty_location_alert">Location can not be empty.</string>
 
 </resources>

@@ -1,6 +1,7 @@
 package training.eduonix.weatherapp;
 
 import android.app.AlertDialog;
+import android.app.ListFragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -17,22 +18,32 @@ import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import training.eduonix.adapters.LocationListAdapter;
 import training.eduonix.custom.Constants;
 
-public class AddLocationFragment extends Fragment implements LocationListener {
+public class AddLocationFragment extends Fragment implements LocationListener,View.OnClickListener {
 
     private LocationManager locationManager;
     private Location currentLocation = null;
     String cityName = "";
     boolean isAutoLocationEnabled = true;
     private ProgressBar locationProgressBar ;
+    private ArrayList<String> locationArray = new ArrayList<String>();
+    private EditText enteredLocation;
+    private ImageView addLocation;
+    private ListView locationList;
+    private LocationListAdapter locationListAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -59,6 +70,24 @@ public class AddLocationFragment extends Fragment implements LocationListener {
             locationProgressBar.setVisibility(View.VISIBLE);
 
         }
+
+        //Load EditText
+        enteredLocation = (EditText) locationView.findViewById(R.id.enter_location);
+
+        //Add location icon
+        addLocation = (ImageView) locationView.findViewById(R.id.add_location_icon);
+        addLocation.setOnClickListener(this);
+
+        //Load ListView
+        locationList = (ListView) locationView.findViewById(R.id.location_list);
+
+        //Adapter for ListView
+        locationListAdapter = new LocationListAdapter(getActivity(),R.id.location_list,locationArray);
+
+        //set the adapter to the list
+        locationList.setAdapter(locationListAdapter);
+
+
         return locationView;
     }
 
@@ -66,7 +95,7 @@ public class AddLocationFragment extends Fragment implements LocationListener {
     public void onResume() {
 
         super.onResume();
-        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+        if (isAutoLocationEnabled && locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             locationManager.requestLocationUpdates(
                     LocationManager.GPS_PROVIDER, 1000, 10, this);
             locationManager.requestLocationUpdates(
@@ -82,7 +111,13 @@ public class AddLocationFragment extends Fragment implements LocationListener {
                 }
             }, 10000);
         }
+        else{
+
+            locationProgressBar.setVisibility(View.GONE);
+
+        }
     }
+
 
     @Override
     public void onLocationChanged(Location location) {
@@ -183,10 +218,34 @@ public class AddLocationFragment extends Fragment implements LocationListener {
         alertDialog.setNegativeButton("No",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
+                        isAutoLocationEnabled = false;
                         dialog.cancel();
                     }
                 });
 
         alertDialog.show();
+    }
+
+    @Override
+    public void onClick(View view) {
+
+        if(view.getId() == R.id.add_location_icon){
+
+            String location = enteredLocation.getText().toString();
+            if(location.equalsIgnoreCase("")){
+
+                Toast.makeText(getActivity(),R.string.empty_location_alert,Toast.LENGTH_SHORT).show();
+
+            }
+            else{
+                locationArray.add(locationArray.size(),location);
+                locationListAdapter.notifyDataSetChanged();
+
+                //Reset the edit text
+                enteredLocation.setText("");
+            }
+
+        }
+
     }
 }
