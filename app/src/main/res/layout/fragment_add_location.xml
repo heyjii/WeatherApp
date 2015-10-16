@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="10dp"
     tools:context="training.eduonix.weatherapp.AddLocationFragment">
 
 
@@ -12,24 +13,21 @@
         <RelativeLayout
             android:id="@+id/enter_location_layout"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
-
-            >
+            android:layout_height="60dp">
 
             <ImageView
                 android:id="@+id/add_location_icon"
-                android:layout_alignParentRight="true"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:src="@drawable/add_icon"
+                android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                />
+                android:src="@drawable/add_icon" />
 
             <EditText
                 android:id="@+id/enter_location"
-                android:layout_toLeftOf="@+id/add_location_icon"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
+                android:layout_toLeftOf="@+id/add_location_icon"
                 android:hint="@string/enter_location" />
         </RelativeLayout>
 
@@ -38,8 +36,8 @@
             android:id="@+id/location_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/enter_location_layout"></ListView>
-
+            android:layout_below="@+id/enter_location_layout">
+        </ListView>
 
     </RelativeLayout>
 
@@ -52,6 +50,5 @@
         android:layout_gravity="center"
         android:indeterminate="false"
         android:visibility="gone" />
-
 
 </FrameLayout>

@@ -1,23 +1,27 @@
 package training.eduonix.weatherapp;
 
 
-import android.os.Bundle;
+import android.app.AlertDialog;
 import android.app.Fragment;
+import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import training.eduonix.custom.Constants;
 
 
-public class  SettingsFragment extends Fragment {
+public class SettingsFragment extends Fragment implements View.OnClickListener,
+        CompoundButton.OnCheckedChangeListener {
 
 
-    private TextView textView ;
-    private Button enterBtn ;
-    private EditText cityTextvalue ;
+    private TextView aboutText;
+    private Switch temperatureSwitch;
+    private Switch autoLocationSwitch;
 
     public SettingsFragment() {
         // Required empty public constructor
@@ -29,21 +33,88 @@ public class  SettingsFragment extends Fragment {
 
         View fragmentView = inflater.inflate(R.layout.fragment_settings, container, false);
 
-        textView = (TextView) fragmentView.findViewById(R.id.TitleText);
-        textView.setTextColor(getResources().getColor(R.color.material_blue_grey_900));
+        //About TextView
+        aboutText = (TextView) fragmentView.findViewById(R.id.about_text);
+        aboutText.setOnClickListener(this);
 
-        cityTextvalue = (EditText) fragmentView.findViewById(R.id.EdtTxtVal);
+        //Temperature Unit
+        temperatureSwitch = (Switch) fragmentView.findViewById(R.id.temp_unit_swich);
+        temperatureSwitch.setOnCheckedChangeListener(this);
 
-        enterBtn = (Button) fragmentView.findViewById(R.id.EnterBtn);
-        enterBtn.setOnClickListener(new View.OnClickListener() {
-               @Override
-                public void onClick(View view)
-                {
-                    Toast.makeText(getActivity(),"Entered City is "+cityTextvalue.getText(),Toast.LENGTH_LONG).show();
-                }
-                                    }
-        );
+        //Auto Location
+        autoLocationSwitch = (Switch) fragmentView.findViewById(R.id.auto_location_switch);
+        autoLocationSwitch.setOnCheckedChangeListener(this);
 
-       return fragmentView ;
+        setHasOptionsMenu(false);
+
+        return fragmentView;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        ((HomeActivity) getActivity()).
+                setActionBarTitle(getActivity().getResources().getString(R.string.settings_fragment_title));
+    }
+
+    @Override
+    public void onClick(View view) {
+
+
+        if (view.getId() == R.id.about_text) {
+
+            AlertDialog.Builder alertDialog = new AlertDialog.Builder(
+                    getActivity());
+
+            alertDialog.setTitle(getActivity().getResources().getString(R.string.about));
+
+            alertDialog
+                    .setMessage(getActivity().getResources().getString(R.string.about_content));
+
+            alertDialog.show();
+
+
+        }
+
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+
+        SharedPreferences sharedPreferences = getActivity().
+                getSharedPreferences(Constants.MY_PREFERENCES, getActivity().MODE_APPEND);
+
+        if (compoundButton.getId() == R.id.temp_unit_swich) {
+
+            if (b) {
+
+                sharedPreferences.edit().putString(Constants.KEY_TEMPERATURE_UNIT,
+                        getActivity().getResources().getString(R.string.centigrade));
+                sharedPreferences.edit().commit();
+
+            } else {
+
+                sharedPreferences.edit().putString(Constants.KEY_TEMPERATURE_UNIT,
+                        getActivity().getResources().getString(R.string.fahrenheit));
+                sharedPreferences.edit().commit();
+            }
+
+        } else if (compoundButton.getId() == R.id.auto_location_switch) {
+
+            if (b) {
+
+                sharedPreferences.edit().putBoolean(Constants.KEY_AUTO_LOCATION_ENABLED, true);
+                sharedPreferences.edit().commit();
+
+            } else {
+
+                sharedPreferences.edit().putBoolean(Constants.KEY_AUTO_LOCATION_ENABLED, true);
+                sharedPreferences.edit().commit();
+            }
+
+        }
+
+
     }
 }

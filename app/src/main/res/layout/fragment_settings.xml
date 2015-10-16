@@ -2,47 +2,59 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/white"
     tools:context="training.eduonix.weatherapp.SettingsFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <Switch
+            android:id="@+id/temp_unit_swich"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:padding="10dp"
+            android:switchMinWidth="120dp"
+            android:text="@string/temperature_unit"
+            android:textColor="@android:color/black"
+            android:textOff="@string/fahrenheit"
+            android:textOn="@string/centigrade"
+            android:textSize="18sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray" />
+
+        <Switch
+            android:id="@+id/auto_location_switch"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:padding="10dp"
+            android:switchMinWidth="120dp"
+            android:text="@string/auto_location"
+            android:textColor="@android:color/black"
+            android:textSize="18sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray" />
 
         <TextView
-            android:id="@+id/TitleText"
+            android:id="@+id/about_text"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:text="Settings"
-            android:textSize="25dp" />
+            android:layout_height="60dp"
+            android:gravity="center_vertical"
+            android:padding="10dp"
+            android:text="@string/about"
+            android:textColor="@android:color/black"
+            android:textSize="18sp" />
 
-        <EditText
-            android:id="@+id/EdtTxtVal"
-            android:layout_width="220dp"
-            android:layout_height="80dp"
-            android:layout_below="@+id/TitleText"
-            android:layout_marginTop="20dp"
-            android:hint="Enter City"
-            android:paddingLeft="20dp" />
-
-        <Button
-            android:id="@+id/EnterBtn"
-            android:layout_width="130dp"
-            android:layout_height="50dp"
-            android:layout_below="@+id/TitleText"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="40dp"
-            android:layout_toRightOf="@+id/EdtTxtVal"
-            android:text="Enter" />
-
-        <CheckBox
-        android:id="@+id/checkBox"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Do you like Tutorials Point"
-        android:layout_below="@+id/EdtTxtVal"
-        android:layout_centerHorizontal="true" />
-
-    </RelativeLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray" />
+    </LinearLayout>
 </FrameLayout>

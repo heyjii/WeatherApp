@@ -7,6 +7,6 @@ public class Constants {
 
     //Keys
     public final static String KEY_AUTO_LOCATION_ENABLED = "Key_Auto_location_Enabled" ;
-
+    public final static String KEY_TEMPERATURE_UNIT = "Temperature_Unit" ;
 
 }

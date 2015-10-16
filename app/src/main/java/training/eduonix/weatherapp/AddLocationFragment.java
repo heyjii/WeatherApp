@@ -95,6 +95,10 @@ public class AddLocationFragment extends Fragment implements LocationListener,Vi
     public void onResume() {
 
         super.onResume();
+
+
+        ((HomeActivity) getActivity()).setActionBarTitle(getActivity().getResources().getString(R.string.add_location_fragment_title));
+
         if (isAutoLocationEnabled && locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             locationManager.requestLocationUpdates(
                     LocationManager.GPS_PROVIDER, 1000, 10, this);
