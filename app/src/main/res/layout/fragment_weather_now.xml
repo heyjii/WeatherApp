@@ -1,0 +1,206 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="training.eduonix.weatherapp.WeatherNowFragment">
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/rlWeatherNow"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/white"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        tools:context="training.eduonix.weatherapp.WeatherActivity$PlaceholderFragment">
+
+        <TextView
+            android:id="@+id/date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="10dp"
+            android:textSize="21sp" />
+
+        <TextView
+            android:id="@+id/day"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginRight="10dp"
+            android:textSize="21sp" />
+
+        <ImageView
+            android:id="@+id/weatherImage"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_below="@+id/date"
+            android:layout_centerHorizontal="true"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="20dp"
+            android:visibility="visible" />
+
+        <TextView
+            android:id="@+id/description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/weatherImage"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="20dp"
+            android:layout_marginTop="20dp"
+            android:textSize="21sp"
+            android:textStyle="italic"/>
+
+        <View
+            android:id="@+id/horzontalSepLineTop"
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:layout_below="@id/description"
+            android:layout_marginTop="15dp"
+            android:background="@android:color/black" />
+
+        <TextView
+            android:id="@+id/tempValue"
+            android:layout_width="100dp"
+            android:layout_height="30dp"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@id/horzontalSepLineTop"
+            android:layout_marginLeft="50dp"
+            android:layout_marginTop="20dp"
+            android:textColor="@android:color/holo_green_dark"
+            android:textSize="21sp" />
+
+        <TextView
+            android:id="@+id/temperatureLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@id/tempValue"
+            android:layout_margin="20dp"
+            android:text="Temperature"
+            android:textSize="21sp"
+            android:textStyle="italic"/>
+
+        <TextView
+            android:id="@+id/humidityValue"
+            android:layout_width="100dp"
+            android:layout_height="30dp"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/horzontalSepLineTop"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="20dp"
+            android:textColor="@android:color/holo_green_dark"
+            android:textSize="21sp" />
+
+        <TextView
+            android:id="@+id/humidityLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/humidityValue"
+            android:layout_marginRight="40dp"
+            android:layout_marginTop="20dp"
+            android:text="Humidity"
+            android:textSize="21sp"
+            android:textStyle="italic"/>
+
+        <View
+            android:id="@+id/horzontalSepLineCenter"
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:layout_below="@id/humidityLabel"
+            android:layout_marginTop="40dp"
+            android:background="@android:color/black" />
+
+        <TextView
+            android:id="@+id/windSpeedValue"
+            android:layout_width="100dp"
+            android:layout_height="30dp"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@id/horzontalSepLineCenter"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="20dp"
+            android:textColor="@android:color/holo_green_dark"
+            android:textSize="21sp" />
+
+        <TextView
+            android:id="@+id/windLabel"
+            android:layout_width="150dp"
+            android:layout_height="30dp"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@id/windSpeedValue"
+            android:layout_marginBottom="30dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="30dp"
+            android:text="Wind Speed"
+            android:textSize="21sp"
+            android:textStyle="italic"/>
+
+        <TextView
+            android:id="@+id/pressureValue"
+            android:layout_width="120dp"
+            android:layout_height="30dp"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/horzontalSepLineCenter"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="20dp"
+            android:textColor="@android:color/holo_green_dark"
+            android:textSize="21sp" />
+
+        <TextView
+            android:id="@+id/pressureLabel"
+            android:layout_width="150dp"
+            android:layout_height="30dp"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/pressureValue"
+            android:layout_marginBottom="30dp"
+            android:layout_marginTop="30dp"
+            android:text="Pressure"
+            android:textSize="21sp"
+            android:textStyle="italic"/>
+
+        <View
+            android:id="@+id/horzontalSepLineBottom"
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:layout_below="@id/pressureLabel"
+            android:background="@android:color/black" />
+
+        <View
+            android:id="@+id/verticalSepLineLeft"
+            android:layout_width="1dp"
+            android:layout_height="fill_parent"
+            android:layout_above="@id/horzontalSepLineBottom"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@id/description"
+            android:layout_marginTop="15dp"
+            android:background="@android:color/black" />
+
+        <View
+            android:id="@+id/verticalSepLineCenter"
+            android:layout_width="1dp"
+            android:layout_height="fill_parent"
+            android:layout_above="@id/horzontalSepLineBottom"
+            android:layout_below="@id/description"
+
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="15dp"
+            android:layout_toRightOf="@id/tempValue"
+            android:background="@android:color/black" />
+
+        <View
+            android:id="@+id/verticalSepLineRight"
+            android:layout_width="1dp"
+            android:layout_height="fill_parent"
+            android:layout_above="@id/horzontalSepLineBottom"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/description"
+            android:layout_marginTop="15dp"
+            android:background="@android:color/black" />
+    </RelativeLayout>
+</FrameLayout>
+

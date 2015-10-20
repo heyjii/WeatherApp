@@ -45,4 +45,13 @@
     <string name="section_format">Hello World from section: %1$d</string>
     <string name="title_activity_weather">WeatherActivity</string>
 
+    <!-- Weather Now Fragment-->
+    <string name="no_network_title">No Network Available</string>
+    <string name="no_network_message">There is no netwok available.\n\n Please check your device network connection</string>
+    <string name="fetch_weather_details">Fetching weather details...</string>
+    <string name="error_title">Error</string>
+    <string name="error_message">An unexpected error occured</string>
+
+
+
 </resources>

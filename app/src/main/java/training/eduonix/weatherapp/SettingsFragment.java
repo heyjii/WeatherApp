@@ -3,6 +3,7 @@ package training.eduonix.weatherapp;
 
 import android.app.AlertDialog;
 import android.app.Fragment;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -41,6 +42,17 @@ public class SettingsFragment extends Fragment implements View.OnClickListener,
         temperatureSwitch = (Switch) fragmentView.findViewById(R.id.temp_unit_swich);
         temperatureSwitch.setOnCheckedChangeListener(this);
 
+
+        SharedPreferences sharedPreferences = this.getActivity().getSharedPreferences(Constants.MY_PREFERENCES, Context.MODE_PRIVATE);
+        String value = sharedPreferences.getString(Constants.KEY_TEMPERATURE_UNIT,Constants.KEY_TEMP_FARENHEIT) ;
+        if(value.equalsIgnoreCase(Constants.KEY_TEMP_CELCIUS))
+        {
+            temperatureSwitch.setChecked(true);
+        }
+        else
+        {
+            temperatureSwitch.setChecked(false);
+        }
         //Auto Location
         autoLocationSwitch = (Switch) fragmentView.findViewById(R.id.auto_location_switch);
         autoLocationSwitch.setOnCheckedChangeListener(this);
@@ -83,20 +95,20 @@ public class SettingsFragment extends Fragment implements View.OnClickListener,
     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
 
         SharedPreferences sharedPreferences = getActivity().
-                getSharedPreferences(Constants.MY_PREFERENCES, getActivity().MODE_APPEND);
+                getSharedPreferences(Constants.MY_PREFERENCES, Context.MODE_APPEND);
 
         if (compoundButton.getId() == R.id.temp_unit_swich) {
 
             if (b) {
 
                 sharedPreferences.edit().putString(Constants.KEY_TEMPERATURE_UNIT,
-                        getActivity().getResources().getString(R.string.centigrade));
+                        Constants.KEY_TEMP_CELCIUS);
                 sharedPreferences.edit().commit();
 
             } else {
 
                 sharedPreferences.edit().putString(Constants.KEY_TEMPERATURE_UNIT,
-                        getActivity().getResources().getString(R.string.fahrenheit));
+                        Constants.KEY_TEMP_FARENHEIT);
                 sharedPreferences.edit().commit();
             }
 

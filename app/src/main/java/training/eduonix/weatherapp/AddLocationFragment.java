@@ -44,6 +44,8 @@ public class AddLocationFragment extends Fragment implements LocationListener,Vi
     private ImageView addLocation;
     private ListView locationList;
     private LocationListAdapter locationListAdapter;
+    boolean isCurrentLocationAdded = false ;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -186,6 +188,7 @@ public class AddLocationFragment extends Fragment implements LocationListener,Vi
                 e.printStackTrace();
             }
         }
+        addCurrentLocationToList() ;
         showLocationMessage();
         return currentLocation;
     }
@@ -239,7 +242,6 @@ public class AddLocationFragment extends Fragment implements LocationListener,Vi
             if(location.equalsIgnoreCase("")){
 
                 Toast.makeText(getActivity(),R.string.empty_location_alert,Toast.LENGTH_SHORT).show();
-
             }
             else{
                 locationArray.add(locationArray.size(),location);
@@ -248,8 +250,17 @@ public class AddLocationFragment extends Fragment implements LocationListener,Vi
                 //Reset the edit text
                 enteredLocation.setText("");
             }
-
         }
 
+    }
+
+    private void addCurrentLocationToList()
+    {
+        if(cityName != null && cityName.length() > 0 && !isCurrentLocationAdded)
+        {
+            locationArray.add(locationArray.size(),cityName);
+            isCurrentLocationAdded = true ;
+            locationListAdapter.notifyDataSetChanged();
+        }
     }
 }
