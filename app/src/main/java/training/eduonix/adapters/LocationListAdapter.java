@@ -1,5 +1,6 @@
 package training.eduonix.adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -9,25 +10,29 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import training.eduonix.custom.Constants;
+import training.eduonix.datamodel.LocationModel;
 import training.eduonix.weatherapp.R;
 import training.eduonix.weatherapp.WeatherActivity;
 
 /**
  * Created by AndroDev on 11-10-2015.
  */
-public class LocationListAdapter extends ArrayAdapter<String> {
+public class LocationListAdapter extends ArrayAdapter<LocationModel> {
 
     Context mContext;
-    ArrayList<String> locationList;
+    ArrayList<LocationModel> locationList;
 
-    public LocationListAdapter(Context context, int resource, ArrayList<String> locations) {
+    public LocationListAdapter(Context context, int resource, ArrayList<LocationModel> locations) {
+
         super(context, resource, locations);
 
         mContext = context;
-        locationList = locations;
+        locationList =  locations;
     }
+
 
 
     @Override
@@ -48,7 +53,7 @@ public class LocationListAdapter extends ArrayAdapter<String> {
 		 * The variable simply refers to the position of the current object in the list. (The ArrayAdapter
 		 * iterates through the list we sent it)
 		 */
-        final String location = locationList.get(position);
+        final String location = locationList.get(position).getName();
 
         tvName.setOnClickListener(new View.OnClickListener() {
             @Override
