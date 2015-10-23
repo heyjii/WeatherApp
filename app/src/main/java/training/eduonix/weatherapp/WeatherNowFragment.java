@@ -16,14 +16,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -32,11 +29,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
+import training.eduonix.custom.AppUtils;
 import training.eduonix.custom.Constants;
 
 
@@ -48,7 +45,6 @@ public class WeatherNowFragment extends Fragment {
     private static String weatherAPIUrl = "";
     private static String weatherIconUrl;
 
-    double temp_KelvinValue = -273.15;
 
     ProgressDialog progressDialog;
 
@@ -65,36 +61,29 @@ public class WeatherNowFragment extends Fragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        Log.e("WeatherNowFragment", "onResume") ;
+
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.e("WeatherNowFragment","onCreate") ;
         if (selectedLocation != null && selectedLocation.length() > 0) {
             weatherAPIUrl = "http://api.openweathermap.org/data/2.5/weather?q=" + selectedLocation + "&appid=d71a5a9bd77fc1d2f3f46e3b322f7366";
-            if (isOnline()) {
+            if (AppUtils.isOnline(getActivity())) {
                 progressDialog = new ProgressDialog(getActivity());
                 progressDialog.setMessage(getActivity().getResources().getString(R.string.fetch_weather_details));
                 progressDialog.show();
 
                 new WeatherNowTask().execute(weatherAPIUrl);
             } else {
-                showAlert(getActivity().getResources().getString(R.string.no_network_title),
+                AppUtils.showAlert(getActivity(),getActivity().getResources().getString(R.string.no_network_title),
                         getActivity().getResources().getString(R.string.no_network_message));
             }
         }
-    }
-
-
-    public boolean isOnline() {
-        ConnectivityManager cm =
-                (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo netInfo = cm.getActiveNetworkInfo();
-        return netInfo != null && netInfo.isConnectedOrConnecting();
-    }
-
-    private void showAlert(String title, String message) {
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
-        alertDialog.setTitle(title);
-        alertDialog.setMessage(message);
-        alertDialog.show();
     }
 
     @Override
@@ -169,10 +158,11 @@ public class WeatherNowFragment extends Fragment {
 
                             String temperature = jsonObject.getJSONObject("main").getString("temp");
                             double tempValue = Double.parseDouble(temperature);
-                            tempValue = tempValue + temp_KelvinValue;
+                            tempValue = tempValue + AppUtils.TEMP_KELVIN_VALUE;
+
 
                             TextView temperatureView = (TextView) weatherNowView.findViewById(R.id.tempValue);
-                            temperatureView.setText(getUpdatedTemperatureValue(tempValue));
+                            temperatureView.setText(AppUtils.getUpdatedTemperatureValue(getActivity(), tempValue));
 
                             String humidity = jsonObject.getJSONObject("main").getString("humidity");
                             Log.e("humidity", "" + humidity);
@@ -192,7 +182,7 @@ public class WeatherNowFragment extends Fragment {
                         }
                         else
                         {
-                            showAlert(getActivity().getResources().getString(R.string.error_title),
+                            AppUtils.showAlert(getActivity(), getActivity().getResources().getString(R.string.error_title),
                                     jsonObject.getString("message"));
                         }
                     }
@@ -206,28 +196,12 @@ public class WeatherNowFragment extends Fragment {
             protected void onCancelled (String s){
                 super.onCancelled(s);
                 progressDialog.hide();
-                showAlert(getActivity().getResources().getString(R.string.error_title),
+                AppUtils.showAlert(getActivity(),getActivity().getResources().getString(R.string.error_title),
                         getActivity().getResources().getString(R.string.error_message));
             }
         }
 
-        private String getUpdatedTemperatureValue(double tempInCelcius) {
-            String tempValue;
-            double temp;
-            SharedPreferences sharedPreferences = getActivity().
-                    getSharedPreferences(Constants.MY_PREFERENCES, Context.MODE_APPEND);
-            String value = sharedPreferences.getString(Constants.KEY_TEMPERATURE_UNIT, Constants.KEY_TEMP_CELCIUS);
-            if (value.equalsIgnoreCase(Constants.KEY_TEMP_CELCIUS)) {
-                temp = tempInCelcius;
-                tempValue = String.format("%.2f", temp);
-                tempValue = tempValue + "°C";
-            } else {
-                temp = (tempInCelcius * 1.8) + 32;
-                tempValue = String.format("%.2f", temp);
-                tempValue = tempValue + "°F";
-            }
-            return tempValue;
-        }
+
 
         private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
             ImageView bmImage;

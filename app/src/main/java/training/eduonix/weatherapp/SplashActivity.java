@@ -5,6 +5,11 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
+import android.widget.TextView;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 import training.eduonix.custom.Constants;
 
@@ -16,24 +21,21 @@ public class SplashActivity extends Activity {
         setContentView(R.layout.activity_splash);
         setAutoLocationDefValue();
 
-        Handler handler = new Handler() ;
+        Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-
-
-                Intent homeIntent = new Intent(SplashActivity.this,HomeActivity.class) ;
+                Intent homeIntent = new Intent(SplashActivity.this, HomeActivity.class);
                 finish();
                 startActivity(homeIntent);
             }
-        },3000) ;
+        }, 3000);
     }
 
-    private void setAutoLocationDefValue()
-    {
-        SharedPreferences sharedPreferences = getSharedPreferences(Constants.MY_PREFERENCES,MODE_APPEND) ;
-        sharedPreferences.edit().putBoolean(Constants.KEY_AUTO_LOCATION_ENABLED,true) ;
-        sharedPreferences.edit().commit() ;
+    private void setAutoLocationDefValue() {
+        SharedPreferences sharedPreferences = getSharedPreferences(Constants.MY_PREFERENCES, MODE_APPEND);
+        sharedPreferences.edit().putBoolean(Constants.KEY_AUTO_LOCATION_ENABLED, true);
+        sharedPreferences.edit().commit();
     }
 
 }

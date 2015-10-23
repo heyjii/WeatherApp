@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -48,16 +49,6 @@ public class WeatherActivity extends AppCompatActivity {
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
-
     }
 
 
@@ -91,17 +82,32 @@ public class WeatherActivity extends AppCompatActivity {
 
         @Override
         public Fragment getItem(int position) {
-
+            Fragment fragment;
+            Log.e("position is","---"+position) ;
             switch (position) {
-                case 0:
-                    return WeatherNowFragment.newInstance(selectedLocation);
-                case 1:
-                    return WeatherTodayFragment.newInstance(selectedLocation);
-                case 2:
-                    return WeatherThisWeekFragment.newInstance(selectedLocation);
-                default:
-                    return WeatherNowFragment.newInstance(selectedLocation);
+                case 0: {
+                    fragment = WeatherNowFragment.newInstance(selectedLocation);
+                    toolbar.setTitle(selectedLocation + " - " + "Weather Now");
+                    break;
+                }
+                case 1: {
+                    fragment = WeatherTodayFragment.newInstance(selectedLocation);
+                    toolbar.setTitle(selectedLocation + " - " + "Weather Today");
+                    break;
+                }
+                case 2: {
+                    fragment = WeatherThisWeekFragment.newInstance(selectedLocation);
+                    toolbar.setTitle(selectedLocation + " - " + "Weather ThisWeek");
+                    break;
+                }
+                default: {
+                    fragment = WeatherThisWeekFragment.newInstance(selectedLocation);
+                    toolbar.setTitle(selectedLocation + " - " + "Weather Now");
+                    break;
+                }
+
             }
+            return fragment;
         }
 
         @Override
@@ -124,20 +130,20 @@ public class WeatherActivity extends AppCompatActivity {
         }
     }
 
-    /**
+   /* *//**
      * A placeholder fragment containing a simple view.
-     */
+     *//*
     public static class PlaceholderFragment extends Fragment {
-        /**
-         * The fragment argument representing the section number for this
-         * fragment.
-         */
+        *//**
+     * The fragment argument representing the section number for this
+     * fragment.
+     *//*
         private static final String ARG_SECTION_NUMBER = "section_number";
 
-        /**
-         * Returns a new instance of this fragment for the given section
-         * number.
-         */
+        *//**
+     * Returns a new instance of this fragment for the given section
+     * number.
+     *//*
         public static PlaceholderFragment newInstance(int sectionNumber) {
             PlaceholderFragment fragment = new PlaceholderFragment();
             Bundle args = new Bundle();
@@ -157,5 +163,5 @@ public class WeatherActivity extends AppCompatActivity {
             textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
             return rootView;
         }
-    }
+    }*/
 }
