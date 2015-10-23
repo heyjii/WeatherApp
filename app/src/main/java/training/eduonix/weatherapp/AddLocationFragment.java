@@ -200,7 +200,7 @@ public class AddLocationFragment extends Fragment implements LocationListener,Vi
             if (cityName.length() > 0) {
                 message = message + "\n City name - " + cityName;
             }
-            Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
+           // Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
         }
     }
 
