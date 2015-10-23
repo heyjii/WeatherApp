@@ -31,6 +31,8 @@ import java.util.Locale;
 
 import training.eduonix.adapters.LocationListAdapter;
 import training.eduonix.custom.Constants;
+import training.eduonix.datamanager.LocationDataManager;
+import training.eduonix.datamodel.LocationModel;
 
 public class AddLocationFragment extends Fragment implements LocationListener,View.OnClickListener {
 
@@ -39,12 +41,13 @@ public class AddLocationFragment extends Fragment implements LocationListener,Vi
     String cityName = "";
     boolean isAutoLocationEnabled = true;
     private ProgressBar locationProgressBar ;
-    private ArrayList<String> locationArray = new ArrayList<String>();
+    private ArrayList<LocationModel> locationArray = new ArrayList<LocationModel>();
     private EditText enteredLocation;
     private ImageView addLocation;
     private ListView locationList;
     private LocationListAdapter locationListAdapter;
     boolean isCurrentLocationAdded = false ;
+    private LocationDataManager locationDataManager;
 
 
     @Override
@@ -82,6 +85,10 @@ public class AddLocationFragment extends Fragment implements LocationListener,Vi
 
         //Load ListView
         locationList = (ListView) locationView.findViewById(R.id.location_list);
+
+        locationDataManager = new LocationDataManager(getActivity());
+        locationDataManager.open();
+        locationArray = (ArrayList<LocationModel>) locationDataManager.getAllLocations();
 
         //Adapter for ListView
         locationListAdapter = new LocationListAdapter(getActivity(),R.id.location_list,locationArray);
@@ -244,7 +251,11 @@ public class AddLocationFragment extends Fragment implements LocationListener,Vi
                 Toast.makeText(getActivity(),R.string.empty_location_alert,Toast.LENGTH_SHORT).show();
             }
             else{
-                locationArray.add(locationArray.size(),location);
+
+                LocationModel locationModel = locationDataManager.createLocation(location,0);
+
+
+                locationArray.add(locationArray.size(),locationModel);
                 locationListAdapter.notifyDataSetChanged();
 
                 //Reset the edit text
@@ -258,7 +269,10 @@ public class AddLocationFragment extends Fragment implements LocationListener,Vi
     {
         if(cityName != null && cityName.length() > 0 && !isCurrentLocationAdded)
         {
-            locationArray.add(locationArray.size(),cityName);
+
+            LocationModel locationModel = locationDataManager.createLocation(cityName,1);
+
+            locationArray.add(locationArray.size(),locationModel);
             isCurrentLocationAdded = true ;
             locationListAdapter.notifyDataSetChanged();
         }
