@@ -14,6 +14,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ListView;
 
+import com.squareup.picasso.Picasso;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -152,8 +154,11 @@ public class WeatherThisWeekFragment extends Fragment {
 
                             if (weatherIconName != null && weatherIconName.length() > 0) {
                                 weatherIconUrl = "http://openweathermap.org/img/w/" + weatherIconName + ".png";
-                                new DownloadImageTask((ImageView) WeatherThisWeekView.findViewById(R.id.weatherImage))
-                                        .execute(weatherIconUrl);
+                                ImageView iconImage = (ImageView) WeatherThisWeekView.findViewById(R.id.weatherImage);
+
+                                Picasso.with(getActivity())
+                                        .load(weatherIconUrl)
+                                        .into(iconImage);
                             }
                             int weatherCount = jsonObject.getInt("cnt");
 

@@ -1,14 +1,9 @@
 package training.eduonix.weatherapp;
 
 
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -18,6 +13,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -148,8 +145,11 @@ public class WeatherNowFragment extends Fragment {
                             String weatherIconName = array.getJSONObject(0).getString("icon");
                             if (weatherIconName != null && weatherIconName.length() > 0) {
                                 weatherIconUrl = "http://openweathermap.org/img/w/" + weatherIconName + ".png";
-                                new DownloadImageTask((ImageView) weatherNowView.findViewById(R.id.weatherImage))
-                                        .execute(weatherIconUrl);
+                                ImageView iconImage = (ImageView) weatherNowView.findViewById(R.id.weatherImage);
+
+                                Picasso.with(getActivity())
+                                        .load(weatherIconUrl)
+                                        .into(iconImage);
                             }
 
                             String desc = array.getJSONObject(0).getString("description");
