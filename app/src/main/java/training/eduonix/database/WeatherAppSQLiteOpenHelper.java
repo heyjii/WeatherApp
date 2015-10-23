@@ -22,7 +22,7 @@ public class WeatherAppSQLiteOpenHelper extends SQLiteOpenHelper {
             + TABLE_LOCATIONS + "(" + COLUMN_ID
             + " integer primary key autoincrement, " + COLUMN_NAME
             + " text not null,"+ COLUMN_AUTO_LOCATION
-            + " integer";
+            + " integer)";
 
     public WeatherAppSQLiteOpenHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
