@@ -57,17 +57,10 @@ public class WeatherNowFragment extends Fragment {
         // Required empty public constructor
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        Log.e("WeatherNowFragment", "onResume") ;
-
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.e("WeatherNowFragment","onCreate") ;
         if (selectedLocation != null && selectedLocation.length() > 0) {
             weatherAPIUrl = "http://api.openweathermap.org/data/2.5/weather?q=" + selectedLocation + "&appid=d71a5a9bd77fc1d2f3f46e3b322f7366";
             if (AppUtils.isOnline(getActivity())) {
@@ -88,6 +81,7 @@ public class WeatherNowFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         weatherNowView = inflater.inflate(R.layout.fragment_weather_now, container, false);
+        ((WeatherActivity)getActivity()).toolbar.setTitle(selectedLocation + " - Now");
 
         return weatherNowView;
     }
@@ -196,39 +190,8 @@ public class WeatherNowFragment extends Fragment {
             protected void onCancelled (String s){
                 super.onCancelled(s);
                 progressDialog.hide();
-                AppUtils.showAlert(getActivity(),getActivity().getResources().getString(R.string.error_title),
+                AppUtils.showAlert(getActivity(), getActivity().getResources().getString(R.string.error_title),
                         getActivity().getResources().getString(R.string.error_message));
             }
         }
-
-
-
-        private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
-            ImageView bmImage;
-
-            public DownloadImageTask(ImageView bmImage) {
-                this.bmImage = bmImage;
-            }
-
-            protected Bitmap doInBackground(String... urls) {
-                String urldisplay = urls[0];
-                Bitmap mIcon11 = null;
-                try {
-                    InputStream in = new java.net.URL(urldisplay).openStream();
-                    mIcon11 = BitmapFactory.decodeStream(in);
-                } catch (Exception e) {
-                    Log.e("Error", e.getMessage());
-                    e.printStackTrace();
-                }
-                return mIcon11;
-            }
-
-            protected void onPostExecute(Bitmap result) {
-
-                progressDialog.hide();
-                ImageView iconImageView = (ImageView) weatherNowView.findViewById(R.id.weatherImage);
-                iconImageView.setImageBitmap(result);
-            }
-        }
-
     }

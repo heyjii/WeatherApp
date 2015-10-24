@@ -63,10 +63,15 @@ public class SettingsFragment extends Fragment implements View.OnClickListener,
     }
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
 
-        ((HomeActivity) getActivity()).
+        ((HomeActivity)getActivity()).
                 setActionBarTitle(getActivity().getResources().getString(R.string.settings_fragment_title));
     }
 

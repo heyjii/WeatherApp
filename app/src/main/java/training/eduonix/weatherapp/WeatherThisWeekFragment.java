@@ -1,6 +1,7 @@
 package training.eduonix.weatherapp;
 
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -64,7 +65,6 @@ public class WeatherThisWeekFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.e("WeatherThisWeekFragment", "onCreate");
 
         if (selectedLocation != null && selectedLocation.length() > 0) {
             weatherAPIUrl = "http://api.openweathermap.org/data/2.5/forecast?q=" + selectedLocation + "&mode=json&appid=d71a5a9bd77fc1d2f3f46e3b322f7366";
@@ -79,14 +79,6 @@ public class WeatherThisWeekFragment extends Fragment {
                         getActivity().getResources().getString(R.string.no_network_message));
             }
         }
-
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        Log.e("WeatherThisWeekFragment", "onResume");
-
     }
 
     @Override
@@ -94,7 +86,6 @@ public class WeatherThisWeekFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         WeatherThisWeekView = inflater.inflate(R.layout.fragment_weather_this_week, container, false);
-
 
         //Load ListView
         weatherDetailsListView = (ListView) WeatherThisWeekView.findViewById(R.id.weatherlistView);
@@ -201,34 +192,6 @@ public class WeatherThisWeekFragment extends Fragment {
             progressDialog.hide();
             AppUtils.showAlert(getActivity(), getActivity().getResources().getString(R.string.error_title),
                     getActivity().getResources().getString(R.string.error_message));
-        }
-
-        private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
-            ImageView bmImage;
-
-            public DownloadImageTask(ImageView bmImage) {
-                this.bmImage = bmImage;
-            }
-
-            protected Bitmap doInBackground(String... urls) {
-                String urldisplay = urls[0];
-                Bitmap mIcon11 = null;
-                try {
-                    InputStream in = new java.net.URL(urldisplay).openStream();
-                    mIcon11 = BitmapFactory.decodeStream(in);
-                } catch (Exception e) {
-                    Log.e("Error", e.getMessage());
-                    e.printStackTrace();
-                }
-                return mIcon11;
-            }
-
-            protected void onPostExecute(Bitmap result) {
-
-                progressDialog.hide();
-                ImageView iconImageView = (ImageView) WeatherThisWeekView.findViewById(R.id.weatherImage);
-                iconImageView.setImageBitmap(result);
-            }
         }
     }
 }

@@ -1,8 +1,7 @@
 package training.eduonix.weatherapp;
 
+import android.app.FragmentTransaction;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -10,12 +9,8 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
 
 import training.eduonix.custom.Constants;
 
@@ -25,7 +20,7 @@ public class WeatherActivity extends AppCompatActivity {
     private ViewPager mViewPager;
     private String selectedLocation = "";
 
-    Toolbar toolbar = null;
+    public Toolbar toolbar = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +34,7 @@ public class WeatherActivity extends AppCompatActivity {
         }
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle(selectedLocation + " - " + "Weather Now");
+
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -49,9 +44,40 @@ public class WeatherActivity extends AppCompatActivity {
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
         mViewPager.setOffscreenPageLimit(2);
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                if (position == 0) {
+                    toolbar.setTitle(selectedLocation + " - Now");
+
+                } else if (position == 1) {
+                    toolbar.setTitle(selectedLocation + " - Today");
+
+                } else if (position == 2) {
+                    toolbar.setTitle(selectedLocation + " - This week");
+
+                }
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.e("onResume", "onResume");
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -66,10 +92,27 @@ public class WeatherActivity extends AppCompatActivity {
             case android.R.id.home:
                 onBackPressed();
                 return true;
+            case R.id.action_settings:
+                // openSettings();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-        return super.onOptionsItemSelected(item);
     }
 
+
+    /**
+     * Method to add the settings fragment.
+     */
+    private void openSettings() {
+
+        SettingsFragment settingsFragment = new SettingsFragment();
+        android.app.FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.add(R.id.container, settingsFragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+    }
 
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
@@ -84,26 +127,21 @@ public class WeatherActivity extends AppCompatActivity {
         @Override
         public Fragment getItem(int position) {
             Fragment fragment;
-            Log.e("position is","---"+position) ;
             switch (position) {
                 case 0: {
                     fragment = WeatherNowFragment.newInstance(selectedLocation);
-                    toolbar.setTitle(selectedLocation + " - " + "Weather Now");
                     break;
                 }
                 case 1: {
                     fragment = WeatherTodayFragment.newInstance(selectedLocation);
-                    toolbar.setTitle(selectedLocation + " - " + "Weather Today");
                     break;
                 }
                 case 2: {
                     fragment = WeatherThisWeekFragment.newInstance(selectedLocation);
-                    toolbar.setTitle(selectedLocation + " - " + "Weather ThisWeek");
                     break;
                 }
                 default: {
                     fragment = WeatherThisWeekFragment.newInstance(selectedLocation);
-                    toolbar.setTitle(selectedLocation + " - " + "Weather Now");
                     break;
                 }
 
@@ -131,38 +169,5 @@ public class WeatherActivity extends AppCompatActivity {
         }
     }
 
-   /* *//**
-     * A placeholder fragment containing a simple view.
-     *//*
-    public static class PlaceholderFragment extends Fragment {
-        *//**
-     * The fragment argument representing the section number for this
-     * fragment.
-     *//*
-        private static final String ARG_SECTION_NUMBER = "section_number";
 
-        *//**
-     * Returns a new instance of this fragment for the given section
-     * number.
-     *//*
-        public static PlaceholderFragment newInstance(int sectionNumber) {
-            PlaceholderFragment fragment = new PlaceholderFragment();
-            Bundle args = new Bundle();
-            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-            fragment.setArguments(args);
-            return fragment;
-        }
-
-        public PlaceholderFragment() {
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_weather, container, false);
-            TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-            textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
-            return rootView;
-        }
-    }*/
 }

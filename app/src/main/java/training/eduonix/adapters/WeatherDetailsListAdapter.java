@@ -25,15 +25,11 @@ public class WeatherDetailsListAdapter extends ArrayAdapter{
         weatherDetailsList = weatherList ;
     }
 
-
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-
-        // assign the view we are converting to a local variable
         View v = convertView;
         TextView dateTime = null;
         TextView temperature = null;
-
 
         LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         v = inflater.inflate(R.layout.list_weather_details, null);
@@ -41,12 +37,6 @@ public class WeatherDetailsListAdapter extends ArrayAdapter{
         // Lookup view for data population
         dateTime = (TextView) v.findViewById(R.id.dateTime);
         temperature = (TextView) v.findViewById(R.id.temperatureValue);
-
-        /*
-         * Recall that the variable position is sent in as an argument to this method.
-		 * The variable simply refers to the position of the current object in the list. (The ArrayAdapter
-		 * iterates through the list we sent it)
-		 */
 
         HashMap<String, String> weatherMap = new HashMap<>() ;
         weatherMap = weatherDetailsList.get(position) ;

@@ -2,8 +2,6 @@ package training.eduonix.weatherapp;
 
 
 import android.app.ProgressDialog;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -26,7 +24,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -64,7 +61,6 @@ public class WeatherTodayFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.e("WeatherTodayFragment", "onCreate") ;
 
         if (selectedLocation != null && selectedLocation.length() > 0) {
             weatherAPIUrl = "http://api.openweathermap.org/data/2.5/forecast?q=" + selectedLocation + "&mode=json&appid=d71a5a9bd77fc1d2f3f46e3b322f7366";
@@ -79,14 +75,6 @@ public class WeatherTodayFragment extends Fragment {
                         getActivity().getResources().getString(R.string.no_network_message));
             }
         }
-
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        Log.e("WeatherTodayFragment", "onResume") ;
-
     }
 
     @Override
@@ -145,7 +133,6 @@ public class WeatherTodayFragment extends Fragment {
 
                         String code = jsonObject.getString("cod");
                         if (code != null && code.length() > 0 && code.equalsIgnoreCase(Constants.KEY_SUCCESS)) {
-
 
                             JSONArray rootArray = jsonObject.getJSONArray("list");
                             JSONArray array = rootArray.getJSONObject(0).getJSONArray("weather");
@@ -209,34 +196,6 @@ public class WeatherTodayFragment extends Fragment {
             progressDialog.hide();
             AppUtils.showAlert(getActivity(), getActivity().getResources().getString(R.string.error_title),
                     getActivity().getResources().getString(R.string.error_message));
-        }
-
-        private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
-            ImageView bmImage;
-
-            public DownloadImageTask(ImageView bmImage) {
-                this.bmImage = bmImage;
-            }
-
-            protected Bitmap doInBackground(String... urls) {
-                String urldisplay = urls[0];
-                Bitmap mIcon11 = null;
-                try {
-                    InputStream in = new java.net.URL(urldisplay).openStream();
-                    mIcon11 = BitmapFactory.decodeStream(in);
-                } catch (Exception e) {
-                    Log.e("Error", e.getMessage());
-                    e.printStackTrace();
-                }
-                return mIcon11;
-            }
-
-            protected void onPostExecute(Bitmap result) {
-
-                progressDialog.hide();
-                ImageView iconImageView = (ImageView) WeatherTodayView.findViewById(R.id.weatherImage);
-                iconImageView.setImageBitmap(result);
-            }
         }
     }
 }
